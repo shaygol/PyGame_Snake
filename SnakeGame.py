@@ -173,12 +173,15 @@ def game_action(key: pygame.key):
 
     if snake_dir == 'down':
         head_pos_y += STEP_LENGTH
-    if snake_dir == 'up':
+    elif snake_dir == 'up':
         head_pos_y -= STEP_LENGTH
-    if snake_dir == 'right':
+    elif snake_dir == 'right':
         head_pos_x += STEP_LENGTH
-    if snake_dir == 'left':
+    elif snake_dir == 'left':
         head_pos_x -= STEP_LENGTH
+    else:
+        # pause game
+        return
 
     for (pox, poy) in snake_pos_lst:
         # check if the head hits part of the body

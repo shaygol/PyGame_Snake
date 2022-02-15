@@ -4,7 +4,7 @@ from collections import namedtuple, OrderedDict
 import random
 
 Color = namedtuple('RGB', 'red, green, blue')
-colors = {}  # dict of colors
+colors = {}  # dict of colors []
 
 class RGB(Color):
     def hex_format(self):

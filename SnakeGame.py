@@ -5,8 +5,14 @@
 import random
 import ConstColors as colors
 from os import environ as env_var
-import tkinter.messagebox
-import tkinter
+try:
+    import tkinter.messagebox
+    import tkinter
+except Exception:
+    print(f'can not import tkinter!')
+    tk_flag = False
+else:
+    tk_flag = True
 
 env_var['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'  # for hiding an annoying message from Pygame
 import pygame
@@ -35,7 +41,6 @@ head_pos_x = None
 head_pos_y = None
 snake_pos_lst = None
 is_space = None
-snake_len = None
 pos_food_x = SCREEN_HEIGHT // 2
 pos_food_y = SCREEN_WIDTH // 2
 score = None
@@ -175,13 +180,14 @@ def game_action(key: pygame.key):
     if snake_dir == 'left':
         head_pos_x -= STEP_LENGTH
 
-    # check if the head hit part of the body or hit the screen edges
     for (pox, poy) in snake_pos_lst:
-        if (pox == head_pos_x) and (poy == head_pos_y):
-            continue
+        # check if the head hits part of the body
+        if (pox, poy) == (head_pos_x, head_pos_y) and len(snake_pos_lst) > 1:
+            finish_game()
+            return
 
-        if (((pox == head_pos_x) and (poy == head_pos_y)) or
-            ((pox >= SCREEN_WIDTH) or (pox <= 0) or (poy >= SCREEN_HEIGHT) or (poy <= 0))):
+        # check if the head hits the screen edges
+        if (pox >= SCREEN_WIDTH) or (pox <= 0) or (poy >= SCREEN_HEIGHT) or (poy <= 0):
             finish_game()
             return
 
@@ -231,7 +237,10 @@ if __name__ == '__main__':
         init_game()
         play_game()
     except Exception as e:
-        msg = tkinter.Tk()
-        msg.title('Snake Cather )-;')
-        msg.geometry('300x1')
-        tkinter.messagebox.showwarning('Snake Cather )-;', f'Unfortunately, the game has closed ({e})', parent=msg)
+        if tk_flag:
+            msg = tkinter.Tk()
+            msg.title('Snake Cather )-;')
+            msg.geometry('300x1')
+            tkinter.messagebox.showwarning('Snake Cather )-;', f'Unfortunately, the game has closed ({e})', parent=msg)
+        else:
+            print(f'Snake Cather - Unfortunately, the game has closed ({e})')
